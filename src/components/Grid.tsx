@@ -16,15 +16,25 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
   const [targetY, setTargetY] = useState(0);
   const [clickedCells, setClickedCells] = useState<Set<string>>(new Set());
   const [lastHint, setLastHint] = useState<string>('');
+  const [correctCell, setCorrectCell] = useState<string | null>(null);
 
-  // ゲーム開始時にランダムなターゲット座標を生成
+  // ゲーム開始時にランダムなターゲット座標を生成（初回のみ）
   useEffect(() => {
-    const newTargetX = Math.floor(Math.random() * 10) + 1;
-    const newTargetY = Math.floor(Math.random() * 10) + 1;
-    setTargetX(newTargetX);
-    setTargetY(newTargetY);
-    setClickedCells(new Set());
-    setLastHint('');
+    if (targetX === 0 && targetY === 0) {
+      const newTargetX = Math.floor(Math.random() * 10) + 1;
+      const newTargetY = Math.floor(Math.random() * 10) + 1;
+      setTargetX(newTargetX);
+      setTargetY(newTargetY);
+    }
+  }, []);
+
+  // Restart時にリセット
+  useEffect(() => {
+    if (!isGameWon) {
+      setClickedCells(new Set());
+      setLastHint('');
+      setCorrectCell(null);
+    }
   }, [isGameWon]);
 
   const handleCellClick = (x: number, y: number) => {
@@ -41,6 +51,7 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
     let hint = '';
     if (distance === 0) {
       hint = '🎉 正解！';
+      setCorrectCell(cellKey); // 正解セルを記録
       onGameWon();
     } else if (distance <= 2) {
       hint = '🔥 激ちか！';
@@ -62,10 +73,14 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
       return 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600';
     }
     
-    const distance = Math.abs(x - targetX) + Math.abs(y - targetY);
-    if (distance === 0) {
+    // 正解セルかどうかを記録された値で判定
+    if (correctCell === cellKey) {
       return 'bg-green-500 text-white';
-    } else if (distance <= 2) {
+    }
+    
+    // その他のセルは距離で判定
+    const distance = Math.abs(x - targetX) + Math.abs(y - targetY);
+    if (distance <= 2) {
       return 'bg-red-400 text-white';
     } else if (distance <= 4) {
       return 'bg-orange-400 text-white';
@@ -73,6 +88,20 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
       return 'bg-yellow-400 text-black';
     } else {
       return 'bg-blue-400 text-white';
+    }
+  };
+
+  const getCellContent = (x: number, y: number) => {
+    const cellKey = `${x},${y}`;
+    if (!clickedCells.has(cellKey)) {
+      return { text: '', icon: null };
+    }
+    
+    // 正解セルかどうかを記録された値で判定
+    if (correctCell === cellKey) {
+      return { text: '', icon: '⭐' }; // 正解アイコン
+    } else {
+      return { text: `${x},${y}`, icon: null };
     }
   };
 
@@ -102,6 +131,7 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
             const cellY = y + 1;
             const cellKey = `${cellX},${cellY}`;
             const isClicked = clickedCells.has(cellKey);
+            const cellContent = getCellContent(cellX, cellY);
             
             return (
               <button
@@ -120,7 +150,8 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
                 aria-label={`座標 (${cellX}, ${cellY}) をクリック`}
                 aria-pressed={isClicked}
               >
-                {isClicked ? `${cellX},${cellY}` : ''}
+                {cellContent.icon && <div className="text-lg">{cellContent.icon}</div>}
+                {cellContent.text && !cellContent.icon && <div>{cellContent.text}</div>}
               </button>
             );
           })
