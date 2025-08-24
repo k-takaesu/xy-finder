@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 XY-Finder - 座標あてゲーム
 
-## Getting Started
+10×10のグリッドから隠された座標を見つけるゲームです。マンハッタン距離に基づいたヒントで、効率的にターゲットを見つけましょう！
 
-First, run the development server:
+## 🚀 起動手順
+
+### 1. 依存関係のインストール
+
+```bash
+npm install
+```
+
+### 2. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. ブラウザでアクセス
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[http://localhost:3000](http://localhost:3000) を開いてゲームを開始！
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎮 遊び方
 
-## Learn More
+- **目標**: 10×10のグリッドから隠された座標を見つける
+- **ヒント**: マスをクリックすると距離に応じたヒントが表示されます
+  - 🎉 正解！
+  - 🔥 激ちか！（距離1-2）
+  - 📏 ちかい（距離3-4）
+  - 📐 ふつう（距離5-6）
+  - 🌌 とおい（距離7以上）
+- **スコア**: 試行回数を少なくしてクリアを目指そう！
+- **ベストスコア**: ローカルストレージに保存されます
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ 技術スタック
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **フレームワーク**: Next.js 15.5.0
+- **言語**: TypeScript
+- **スタイリング**: Tailwind CSS
+- **状態管理**: React Hooks
+- **データ保存**: localStorage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📱 機能
 
-## Deploy on Vercel
+- ✅ 10×10のクリック可能なグリッド
+- ✅ ランダムなターゲット座標生成
+- ✅ マンハッタン距離に基づくヒントシステム
+- ✅ 試行回数カウント
+- ✅ ベストスコアの保存・表示
+- ✅ レスポンシブデザイン（モバイル対応）
+- ✅ アクセシビリティ対応（キーボード操作、aria属性）
+- ✅ ダークモード対応
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Vercelへデプロイ
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. GitHubにプッシュ
+
+```bash
+git add .
+git commit -m "Initial commit"
+git push origin main
+```
+
+### 2. Vercelでデプロイ
+
+1. [Vercel](https://vercel.com) にアクセス
+2. GitHubアカウントでログイン
+3. "New Project" をクリック
+4. GitHubリポジトリを選択
+5. プロジェクト設定を確認（自動検出されるはず）
+6. "Deploy" をクリック
+
+### 3. 環境変数（必要に応じて）
+
+このプロジェクトは特別な環境変数は不要です。
+
+### 4. デプロイ完了
+
+デプロイが完了すると、VercelからURLが提供されます。
+
+## 📁 プロジェクト構造
+
+```
+src/
+├── app/
+│   ├── page.tsx          # メインページ
+│   ├── layout.tsx        # レイアウト
+│   └── globals.css       # グローバルスタイル
+└── components/
+    └── Grid.tsx          # グリッドコンポーネント
+```
+
+## 🎯 今後の改善案
+
+- [ ] 難易度設定（グリッドサイズ変更）
+- [ ] タイマー機能
+- [ ] ランキングシステム
+- [ ] サウンドエフェクト
+- [ ] アニメーション効果
+
+## 📄 ライセンス
+
+MIT License
