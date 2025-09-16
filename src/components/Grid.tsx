@@ -18,15 +18,13 @@ export default function Grid({ onCellClick, onGameWon, attempts, bestScore, isGa
   const [lastHint, setLastHint] = useState<string>('');
   const [correctCell, setCorrectCell] = useState<string | null>(null);
 
-  // ゲーム開始時にランダムなターゲット座標を生成（初回のみ）
+  // 初回またはRestart時にターゲット座標を生成
   useEffect(() => {
-    if (targetX === 0 && targetY === 0) {
-      const newTargetX = Math.floor(Math.random() * 10) + 1;
-      const newTargetY = Math.floor(Math.random() * 10) + 1;
-      setTargetX(newTargetX);
-      setTargetY(newTargetY);
-    }
-  }, []);
+    const newTargetX = Math.floor(Math.random() * 10) + 1;
+    const newTargetY = Math.floor(Math.random() * 10) + 1;
+    setTargetX(newTargetX);
+    setTargetY(newTargetY);
+  }, [isGameWon]); // isGameWonがfalseになった時（Restart時）に実行
 
   // Restart時にリセット
   useEffect(() => {
